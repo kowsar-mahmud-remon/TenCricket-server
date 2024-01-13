@@ -32,6 +32,32 @@ const getAllCurrentMatchesData = catchAsync(
   }
 );
 
+const getAllCricketSeriesData = catchAsync(
+  async (req: Request, res: Response) => {
+    // const scoreboardData =
+    const apiResponse = await axios.get('https://api.cricapi.com/v1/series', {
+      params: {
+        apikey: '8a9242f8-a2b7-44fc-adf7-20a0c02b6659',
+        offset: 0,
+      },
+    });
+
+    const responseData = apiResponse?.data?.data;
+
+    if (!responseData) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to get data');
+    }
+
+    res.status(httpStatus.OK).json({
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Cricket Series data fetched successfully !',
+      data: responseData,
+    });
+  }
+);
+
 export const CricketScoreboardController = {
   getAllCurrentMatchesData,
+  getAllCricketSeriesData,
 };
